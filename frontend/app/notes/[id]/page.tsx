@@ -97,8 +97,8 @@ export default function NoteViewerPage({ params }: { params: { id: string } }) {
       setNote(fetchedNote)
       setViewCount(fetchedNote.viewCount || 0)
       setOriginalFiles(JSON.parse(JSON.stringify(fetchedNote.files || []))) // Deep clone
-      setVisibility(fetchedNote.visibility || "private")
-      setOriginalVisibility(fetchedNote.visibility || "private")
+      setVisibility(fetchedNote.visibility === "public" ? "public" : "private")
+      setOriginalVisibility(fetchedNote.visibility === "public" ? "public" : "private")
 
       // Increment view count
       incrementNoteViewCount(params.id)
