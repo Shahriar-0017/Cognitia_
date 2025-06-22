@@ -21,7 +21,7 @@ export default function LoginPage() {
     
     try {
       // Connect to your Express backend
-      const response = await fetch('http://localhost:3001/api/auth/login', {
+      const response = await fetch('http://135.235.192.167/:3001/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
