@@ -48,7 +48,7 @@
     "cmdk": "1.0.4",
     "compression": "^1.8.0",
     "cors": "latest",
-    "date-fns": "4.1.0",
+    "date-fns": "3.6.0",
     "dotenv": "latest",
     "embla-carousel-react": "8.5.1",
     "express": "latest",
