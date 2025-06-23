@@ -97,9 +97,9 @@ app.use(errorHandler)
 
 // Start server
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running on port ${PORT}`)
-  console.log(`📊 Health check: http://localhost:${PORT}/health`)
-  console.log(`🔗 API base URL: http://localhost:${PORT}/api`)
-})
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📊 Health check: http://0.0.0.0:${PORT}/health`);
+  console.log(`🔗 API base URL: http://0.0.0.0:${PORT}/api`);
+});
 
 export default app
