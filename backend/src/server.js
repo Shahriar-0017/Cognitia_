@@ -46,7 +46,7 @@ app.use("/api/", limiter);
 const allowedOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
-  "http://135.235.192.167:3000",
+  "https://135.235.192.167:3000",
 ];
 
 app.use(
