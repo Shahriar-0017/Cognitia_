@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
@@ -24,6 +23,7 @@ import analyticsRoutes from "./routes/analytics.js";
 
 import errorHandler from "./middleware/errorHandler.js";
 import { authenticateToken } from "./middleware/auth.js";
+import corsMiddleware from "./middleware/cors.js";
 
 dotenv.config();
 
@@ -42,41 +42,11 @@ const limiter = rateLimit({
 });
 app.use("/api/", limiter);
 
-// CORS configuration
-const allowedOrigins = [
-  "http://localhost:3000", // Local development frontend
-  "http://127.0.0.1:3000", // Another common localhost variant
-  process.env.FRONTEND_URL, // Production frontend URL from env
-  // Add your Azure VM frontend URL here, for example:
-  "http://135.235.192.167:3000", // Azure VM frontend URL
-  // "https://yourdomain.azurewebsites.net"
-].filter(Boolean); // Remove any undefined/null values
+// Apply the CORS middleware
+app.use(corsMiddleware);
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps, curl requests)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-        callback(null, true);
-      } else {
-        console.log(`CORS blocked request from: ${origin}`);
-        console.log(`Allowed origins: ${allowedOrigins.join(", ")}`);
-        callback(null, true); // Allow all origins in development
-        // In production, you might want to use: callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-    allowedHeaders: ["Content-Type", "Authorization"],
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-  })
-);
-
-// Add this before your API routes
-app.options('*', cors()); // Enable preflight for all routes
+// Explicitly handle preflight requests for all routes
+app.options("*", corsMiddleware);
 
 // Logging
 app.use(morgan("combined"));
@@ -111,6 +81,29 @@ app.use("/api/dashboard", authenticateToken, dashboardRoutes);
 //app.use("/api/search", authenticateToken, searchRoutes)
 app.use("/api/analytics", authenticateToken, analyticsRoutes);
 
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    error: "Route not found",
+    path: req.originalUrl,});
+    method: req.method,
+  });
+});
+
+app.use(errorHandler);
+.listen(PORT, "0.0.0.0", () => {
+// Start server  console.log(`🚀 Server running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {ealth check: http://localhost:${PORT}/health`);
+  console.log(`🚀 Server running on port ${PORT}`);  console.log(`🔗 API base URL: http://localhost:${PORT}/api`);
+
+
+
+
+
+
+export default app;});  console.log(`🔗 API base URL: http://localhost:${PORT}/api`);  console.log(`📊 Health check: http://localhost:${PORT}/health`);});
+
+export default app;
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
