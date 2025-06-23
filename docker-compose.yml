@@ -15,7 +15,7 @@ services:
     build: ./backend
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/cognitia
-      JWT_SECRET: your_jwt_secret
+      JWT_SECRET: JWT_SECRET_KEY
       FRONTEND_URL: http://135.235.192.167:3000
     ports:
       - "3001:3001"
