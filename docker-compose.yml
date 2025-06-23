@@ -18,9 +18,9 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/cognitia
       JWT_SECRET: "JWT_SECRET_KEY"
-      FRONTEND_URL: "*"
+      FRONTEND_URL: "http://localhost:3000"
       NODE_ENV: development
-      ALLOWED_ORIGINS: "*"
+      ALLOWED_ORIGINS: "http://localhost:3000"
     ports:
       - "3001:3001"
     depends_on:
@@ -30,7 +30,7 @@ services:
   frontend:
     image: ${DOCKER_HUB_USERNAME}/cognitia-frontend:latest
     environment:
-      NEXT_PUBLIC_API_URL: http://135.235.192.167:3001/api
+      NEXT_PUBLIC_API_URL: http://localhost:3001/api
     ports:
       - "3000:3000"
     depends_on:
