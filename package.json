@@ -7,7 +7,10 @@
     "build": "next build",
     "dev": "cd frontend && next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "cd frontend && npm test",
+    "test:backend": "cd backend && npm test"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
