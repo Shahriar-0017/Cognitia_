@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
@@ -18,12 +19,11 @@ import notificationRoutes from "./routes/notifications.js";
 import settingsRoutes from "./routes/settings.js";
 import profileRoutes from "./routes/profile.js";
 import dashboardRoutes from "./routes/dashboard.js";
-//import searchRoutes from "./routes/search.js"
+// import searchRoutes from "./routes/search.js";
 import analyticsRoutes from "./routes/analytics.js";
 
 import errorHandler from "./middleware/errorHandler.js";
 import { authenticateToken } from "./middleware/auth.js";
-import corsMiddleware from "./middleware/cors.js";
 
 dotenv.config();
 
@@ -42,11 +42,17 @@ const limiter = rateLimit({
 });
 app.use("/api/", limiter);
 
-// Apply the CORS middleware
-app.use(corsMiddleware);
-
-// Explicitly handle preflight requests for all routes
-app.options("*", corsMiddleware);
+// CORS configuration
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  })
+);
 
 // Logging
 app.use(morgan("combined"));
@@ -78,52 +84,26 @@ app.use("/api/notifications", authenticateToken, notificationRoutes);
 app.use("/api/settings", authenticateToken, settingsRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/dashboard", authenticateToken, dashboardRoutes);
-//app.use("/api/search", authenticateToken, searchRoutes)
+// app.use("/api/search", authenticateToken, searchRoutes);
 app.use("/api/analytics", authenticateToken, analyticsRoutes);
 
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
     error: "Route not found",
-    path: req.originalUrl,});
+    path: req.originalUrl,
     method: req.method,
   });
 });
 
+// Error handling middleware
 app.use(errorHandler);
-.listen(PORT, "0.0.0.0", () => {
-// Start server  console.log(`🚀 Server running on port ${PORT}`);
-app.listen(PORT, "0.0.0.0", () => {ealth check: http://localhost:${PORT}/health`);
-  console.log(`🚀 Server running on port ${PORT}`);  console.log(`🔗 API base URL: http://localhost:${PORT}/api`);
 
-
-
-
-
-
-export default app;});  console.log(`🔗 API base URL: http://localhost:${PORT}/api`);  console.log(`📊 Health check: http://localhost:${PORT}/health`);});
-
-export default app;
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    error: "Route not found",
-    path: req.originalUrl,});
-    method: req.method,
-  });
+// Start server
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🔗 API base URL: http://localhost:${PORT}/api`);
+  console.log(`📊 Health check: http://localhost:${PORT}/health`);
 });
-
-app.use(errorHandler);
-.listen(PORT, "0.0.0.0", () => {
-// Start server  console.log(`🚀 Server running on port ${PORT}`);
-app.listen(PORT, "0.0.0.0", () => {ealth check: http://localhost:${PORT}/health`);
-  console.log(`🚀 Server running on port ${PORT}`);  console.log(`🔗 API base URL: http://localhost:${PORT}/api`);
-
-
-
-
-
-
-export default app;});  console.log(`🔗 API base URL: http://localhost:${PORT}/api`);  console.log(`📊 Health check: http://localhost:${PORT}/health`);});
 
 export default app;

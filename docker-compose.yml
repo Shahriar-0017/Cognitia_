@@ -15,7 +15,7 @@ services:
 
   backend:
     image: ${DOCKER_HUB_USERNAME}/cognitia-backend:latest
-    environment:
+    environment: 
       DATABASE_URL: postgres://postgres:postgres@db:5432/cognitia
       JWT_SECRET: ${JWT_SECRET}
       FRONTEND_URL: "*"
