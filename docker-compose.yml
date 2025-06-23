@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   db:
     image: postgres:15
@@ -10,26 +11,29 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   backend:
-    build: ./backend
+    image: ${DOCKER_HUB_USERNAME}/cognitia-backend:latest
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/cognitia
-      JWT_SECRET: JWT_SECRET_KEY
+      JWT_SECRET: ${JWT_SECRET}
       FRONTEND_URL: http://135.235.192.167:3000
     ports:
       - "3001:3001"
     depends_on:
       - db
+    restart: unless-stopped
 
   frontend:
-    build: ./frontend
+    image: ${DOCKER_HUB_USERNAME}/cognitia-frontend:latest
     environment:
       NEXT_PUBLIC_API_URL: http://135.235.192.167:3001/api
     ports:
       - "3000:3000"
     depends_on:
       - backend
+    restart: unless-stopped
 
 volumes:
   db_data:
