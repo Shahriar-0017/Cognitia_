@@ -62,27 +62,3 @@ jobs:
             docker-compose down
             docker-compose up -d
             docker system prune -f
-          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/cognitia-frontend:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/cognitia-frontend:buildcache,mode=max
-          
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        
-      - name: Execute deployment script
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USERNAME }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: |
-            cd /home/seed/Cognitia_
-            docker-compose pull
-            docker-compose down
-            docker-compose up -d
-            docker system prune -f
