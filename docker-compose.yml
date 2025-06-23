@@ -19,6 +19,8 @@ services:
       DATABASE_URL: postgres://postgres:postgres@db:5432/cognitia
       JWT_SECRET: ${JWT_SECRET}
       FRONTEND_URL: http://135.235.192.167:3000
+      NODE_ENV: development
+      ALLOWED_ORIGINS: "http://localhost:3000"
     ports:
       - "3001:3001"
     depends_on:

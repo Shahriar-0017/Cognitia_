@@ -45,6 +45,7 @@ app.use("/api/", limiter);
 // CORS configuration
 const allowedOrigins = [
   "http://localhost:3000", // Local development frontend
+  "http://127.0.0.1:3000", // Another common localhost variant
   process.env.FRONTEND_URL, // Production frontend URL from env
   // Add your Azure VM frontend URL here, for example:
   "http://135.235.192.167:3000", // Azure VM frontend URL
@@ -57,19 +58,25 @@ app.use(
       // Allow requests with no origin (like mobile apps, curl requests)
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.indexOf(origin) !== -1) {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
         callback(null, true);
       } else {
         console.log(`CORS blocked request from: ${origin}`);
-        callback(new Error("Not allowed by CORS"));
+        console.log(`Allowed origins: ${allowedOrigins.join(", ")}`);
+        callback(null, true); // Allow all origins in development
+        // In production, you might want to use: callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: ["Content-Type", "Authorization"],
     preflightContinue: false,
     optionsSuccessStatus: 204,
   })
 );
+
+// Add this before your API routes
+app.options('*', cors()); // Enable preflight for all routes
 
 // Logging
 app.use(morgan("combined"));
@@ -108,19 +115,22 @@ app.use("/api/analytics", authenticateToken, analyticsRoutes);
 app.use((req, res) => {
   res.status(404).json({
     error: "Route not found",
-    path: req.originalUrl,
+    path: req.originalUrl,});
     method: req.method,
   });
 });
 
-// Error handling middleware
 app.use(errorHandler);
+.listen(PORT, "0.0.0.0", () => {
+// Start server  console.log(`🚀 Server running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {ealth check: http://localhost:${PORT}/health`);
+  console.log(`🚀 Server running on port ${PORT}`);  console.log(`🔗 API base URL: http://localhost:${PORT}/api`);
 
-// Start server
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/health`);
-  console.log(`🔗 API base URL: http://localhost:${PORT}/api`);
-});
+
+
+
+
+
+export default app;});  console.log(`🔗 API base URL: http://localhost:${PORT}/api`);  console.log(`📊 Health check: http://localhost:${PORT}/health`);});
 
 export default app;
